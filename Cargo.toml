@@ -2,6 +2,9 @@
 edition = "2024"
 name = "zzsleep"
 version = "0.0.1"
+description = "A CLI timer tool that waits until a specified time with a progress bar"
+license = "Apache-2.0"
+repository = "https://github.com/takumi3488/zz"
 
 [[bin]]
 name = "zz"
