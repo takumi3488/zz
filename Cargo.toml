@@ -1,10 +1,16 @@
 [package]
-name = "zz"
-version = "0.1.0"
 edition = "2024"
+name = "zzsleep"
+version = "0.1.0"
+
+[[bin]]
+name = "zz"
+path = "src/main.rs"
 
 [dependencies]
-tokio = { version = "1.49.0", features = ["rt", "macros"] }
+chrono = { version = "0.4", features = ["clock"] }
+indicatif = "0.17"
+tokio = { version = "1.49.0", features = ["rt", "macros", "time"] }
 
 [profile.release]
 codegen-units = 1
