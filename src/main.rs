@@ -1,11 +1,12 @@
 use chrono::Local;
-use zzsleep::{parse_end_time, sleep_until_with_progress};
+use zzsleep::{parse_end_time, sleep_until, split_args};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
-    let args: Vec<String> = std::env::args().skip(1).collect();
+    let raw_args: Vec<String> = std::env::args().skip(1).collect();
+    let (quiet, time_args) = split_args(&raw_args);
 
-    if args.is_empty() {
+    if time_args.is_empty() {
         eprintln!("Usage: zz <duration>");
         eprintln!("  zz 10          # 10 seconds");
         eprintln!("  zz 2h          # 2 hours");
@@ -18,11 +19,14 @@ async fn main() {
         eprintln!("  zz 12:30:45    # until 12:30:45 today (tomorrow if past)");
         eprintln!("  zz 20260220T123000+0900  # ISO 8601 with timezone");
         eprintln!("  zz 20260220T123000Z      # ISO 8601 UTC");
+        eprintln!();
+        eprintln!("Options:");
+        eprintln!("  -q, --quiet    suppress progress bar");
         std::process::exit(1);
     }
 
     let now = Local::now();
-    let end_time = match parse_end_time(&args, now) {
+    let end_time = match parse_end_time(&time_args, now) {
         Ok(t) => t,
         Err(e) => {
             eprintln!("error: {}", e);
@@ -30,5 +34,5 @@ async fn main() {
         }
     };
 
-    sleep_until_with_progress(end_time).await;
+    sleep_until(end_time, quiet).await;
 }
