@@ -165,6 +165,31 @@ pub async fn sleep_until_with_progress(end_time: DateTime<Local>) {
     pb.finish();
 }
 
+async fn sleep_until_without_progress(end_time: DateTime<Local>) {
+    let remaining = (end_time - Local::now()).num_milliseconds();
+    if remaining > 0 {
+        tokio::time::sleep(StdDuration::from_millis(remaining as u64)).await;
+    }
+}
+
+pub async fn sleep_until(end_time: DateTime<Local>, quiet: bool) {
+    if quiet {
+        sleep_until_without_progress(end_time).await;
+    } else {
+        sleep_until_with_progress(end_time).await;
+    }
+}
+
+pub fn split_args(raw: &[String]) -> (bool, Vec<String>) {
+    let quiet = raw.iter().any(|a| a == "-q" || a == "--quiet");
+    let time_args = raw
+        .iter()
+        .filter(|a| *a != "-q" && *a != "--quiet")
+        .cloned()
+        .collect();
+    (quiet, time_args)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -340,5 +365,56 @@ mod tests {
         let now = make_dt(2026, 12, 31, 23, 0, 0);
         let end = make_dt(2027, 1, 1, 0, 0, 0);
         assert_eq!(format_eta(&end, &now), "2027-01-01 00:00:00");
+    }
+
+    // split_args tests
+
+    #[test]
+    fn test_split_args_short_flag_prefix() {
+        let raw = args(&["-q", "3"]);
+        let (quiet, time_args) = split_args(&raw);
+        assert!(quiet);
+        assert_eq!(time_args, args(&["3"]));
+    }
+
+    #[test]
+    fn test_split_args_long_flag_suffix() {
+        let raw = args(&["5m", "--quiet"]);
+        let (quiet, time_args) = split_args(&raw);
+        assert!(quiet);
+        assert_eq!(time_args, args(&["5m"]));
+    }
+
+    #[test]
+    fn test_split_args_no_flag() {
+        let raw = args(&["2h", "30m"]);
+        let (quiet, time_args) = split_args(&raw);
+        assert!(!quiet);
+        assert_eq!(time_args, args(&["2h", "30m"]));
+    }
+
+    #[test]
+    fn test_split_args_flag_between() {
+        let raw = args(&["1h", "-q", "30m"]);
+        let (quiet, time_args) = split_args(&raw);
+        assert!(quiet);
+        assert_eq!(time_args, args(&["1h", "30m"]));
+    }
+
+    // sleep_until_without_progress tests
+
+    #[tokio::test]
+    async fn test_sleep_until_without_progress_past() {
+        let past = Local::now() - Duration::seconds(1);
+        // should return immediately without panicking
+        sleep_until_without_progress(past).await;
+    }
+
+    #[tokio::test]
+    async fn test_sleep_until_without_progress_near_future() {
+        let future = Local::now() + Duration::milliseconds(100);
+        let start = std::time::Instant::now();
+        sleep_until_without_progress(future).await;
+        assert!(start.elapsed() < std::time::Duration::from_millis(500));
     }
 }

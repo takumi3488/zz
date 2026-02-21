@@ -1,10 +1,10 @@
 [package]
-edition = "2024"
-name = "zzsleep"
-version = "0.0.2"
 description = "A CLI timer tool that waits until a specified time with a progress bar"
+edition = "2024"
 license = "Apache-2.0"
+name = "zzsleep"
 repository = "https://github.com/takumi3488/zz"
+version = "0.0.2"
 
 [[bin]]
 name = "zz"
