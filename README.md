@@ -4,6 +4,20 @@ A CLI sleep/timer utility that waits until a specified duration or time. Install
 
 ## Installation
 
+### Shell script (macOS / Linux)
+
+```sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/takumi3488/zz/releases/latest/download/zzsleep-installer.sh | sh
+```
+
+### PowerShell (Windows)
+
+```powershell
+powershell -ExecutionPolicy Bypass -c "irm https://github.com/takumi3488/zz/releases/latest/download/zzsleep-installer.ps1 | iex"
+```
+
+### cargo
+
 ```sh
 cargo install zzsleep
 ```
