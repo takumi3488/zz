@@ -19,3 +19,6 @@ tokio = { version = "1.49.0", features = ["rt", "macros", "time"] }
 codegen-units = 1
 lto = true
 strip = true
+
+[profile.dist]
+inherits = "release"
