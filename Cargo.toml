@@ -20,5 +20,8 @@ codegen-units = 1
 lto = true
 strip = true
 
+[package.metadata.dist]
+formula = "zz"
+
 [profile.dist]
 inherits = "release"
