@@ -4,6 +4,12 @@ A CLI sleep/timer utility that waits until a specified duration or time. Install
 
 ## Installation
 
+### Homebrew (macOS / Linux)
+
+```sh
+brew install takumi3488/tap/zzsleep
+```
+
 ### Shell script (macOS / Linux)
 
 ```sh
@@ -16,10 +22,10 @@ curl --proto '=https' --tlsv1.2 -LsSf https://github.com/takumi3488/zz/releases/
 powershell -ExecutionPolicy Bypass -c "irm https://github.com/takumi3488/zz/releases/latest/download/zzsleep-installer.ps1 | iex"
 ```
 
-### cargo
+### Build from source
 
 ```sh
-cargo install zzsleep
+cargo install --git https://github.com/takumi3488/zz
 ```
 
 This installs the binary as `zz`.

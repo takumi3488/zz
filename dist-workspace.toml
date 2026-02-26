@@ -4,7 +4,7 @@ members = ["cargo:."]
 [dist]
 cargo-dist-version = "0.31.0"
 ci = "github"
-installers = ["shell", "powershell"]
+installers = ["shell", "powershell", "homebrew"]
 targets = [
     "aarch64-apple-darwin",
     "x86_64-apple-darwin",
@@ -13,3 +13,6 @@ targets = [
     "x86_64-pc-windows-msvc",
 ]
 install-path = "CARGO_HOME"
+publish-jobs = ["homebrew"]
+tap = "takumi3488/homebrew-tap"
+allow-dirty = ["ci"]
