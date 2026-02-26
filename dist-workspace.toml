@@ -15,4 +15,3 @@ targets = [
 install-path = "CARGO_HOME"
 publish-jobs = ["homebrew"]
 tap = "takumi3488/homebrew-tap"
-allow-dirty = ["ci"]
